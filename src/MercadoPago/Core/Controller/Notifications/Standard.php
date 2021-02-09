@@ -1,6 +1,9 @@
 <?php
 namespace MercadoPago\Core\Controller\Notifications;
 
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 /**
  * Class Standard
  *
@@ -8,7 +11,7 @@ namespace MercadoPago\Core\Controller\Notifications;
  */
 class Standard
     extends \Magento\Framework\App\Action\Action
-
+    implements CsrfAwareActionInterface
 {
     /**
      * @var \MercadoPago\Core\Model\Standard\PaymentFactory
@@ -232,5 +235,22 @@ class Standard
         $this->coreHelper->log("Http code", self::LOG_NAME, $this->getResponse()->getHttpResponseCode());
 
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createCsrfValidationException(
+        RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 }
